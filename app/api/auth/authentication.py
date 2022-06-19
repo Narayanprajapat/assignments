@@ -169,7 +169,7 @@ def user_login_api(request):
             if token is None:
                 return make_response(jsonify({"message": "Token Generation Failed.", "status_code": 500}), 500)
 
-            if resp['user_type'] == "Operation":
+            if resp['user_type'] == "operation":
                 redirect_url = '/api/upload_file'
             else:
                 redirect_url = ['/api/list/upload_file', 'api/download_file/<assignment_id>']

@@ -48,11 +48,11 @@ def download_file_api(assignment_id, request):
         return make_response(jsonify({'message': 'Invalid Input', 'status_code': 400}), 400)
 
     if token is None:
-        return make_response(jsonify({'message': "Please Login", "status_code": 400}), 400)
+        return make_response(jsonify({'message': "Access denied", "status_code": 400}), 400)
 
     token = token_decode(token)
     if not token['user_type'] != 'operation':
-        return make_response(jsonify({'message': 'Operation user can not see upload file list', 'status_code': 400}), 400)
+        return make_response(jsonify({'message': 'Access denied', 'status_code': 400}), 400)
 
     try:
         result = File().read({"_id": ObjectId(assignment_id)}, {"filename": 1, "created_at": 1})
@@ -61,10 +61,7 @@ def download_file_api(assignment_id, request):
         if output['status_code'] != 200:
             return make_response(jsonify({'message': 'Internal Server Error', "status_code": 500}), 500)
 
-        files = list()
-        files.append({'filename': result['filename'], 'upload_time': result['created_at'], 'download_url': output['link']})
-
-        return make_response(jsonify({'message': 'success', 'upload_file': files, 'status_code': 200}), 200)
+        return make_response(jsonify({'message': 'success', 'download-link': output['link']}), 200)
     except Exception as e:
         print(e)
         return make_response(jsonify({'message': 'Internal Server Error', "status_code": 500}), 500)
@@ -81,13 +78,17 @@ def list_upload_files_api(request):
 
     token = token_decode(token)
     if not token['user_type'] != 'operation':
-        return make_response(jsonify({'message': 'Operation user can not see upload file list', 'status_code': 400}), 400)
+        return make_response(jsonify({'message': 'Access denied', 'status_code': 400}), 400)
 
     try:
         result = File().find()
         files = list()
         for i in list(result):
-            files.append({'assignment_id': str(i['_id']), 'filename': i['filename'], 'upload_time': i['created_at']})
+            files.append({
+                'assignment_id': str(i['_id']),
+                'filename': i['filename'],
+                'upload_time': i['created_at']
+            })
 
         return make_response(jsonify({'message': 'success', 'upload_file': files, 'status_code': 200}), 200)
     except Exception as e:
