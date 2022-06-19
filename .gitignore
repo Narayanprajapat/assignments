@@ -8,5 +8,5 @@ Untitled.ipynb
 .cpython-39.pyc
 _pycache_
 __pycache__/
-.env.dev
+venv/.env.dev
 */**/__pycache__/*
