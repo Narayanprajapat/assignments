@@ -15,6 +15,12 @@ def upload_file_api(request):
     except Exception as e:
         return make_response(jsonify({'message': 'Invalid Input', 'status_code': 400}), 400)
 
+    if file == "":
+        return make_response(jsonify({'message': 'Invalid Input File'}), 400)
+
+    if token == "":
+        return make_response(jsonify({'message': 'You are not authenticate'}), 400)
+
     token = token_decode(token)
     if not token['user_type'] == 'operation':
         return make_response(jsonify({'message': 'Client user can not upload file', 'status_code': 400}), 400)

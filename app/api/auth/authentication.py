@@ -47,6 +47,20 @@ def user_registered_api(request):
         print(e)
         return make_response(jsonify({"message": "Invalid Input", "status_code": 400}), 400)
 
+    if full_name == "":
+        return make_response(jsonify({'message': 'Invalid Input Fullname'}), 400)
+    if email == "":
+        return make_response(jsonify({'message': 'Invalid Input Email'}), 400)
+    if user_type == "":
+        return make_response(jsonify({'message': 'Invalid Input User Type'}), 400)
+    if password == "":
+        return make_response(jsonify({'message': 'Invalid Input Password'}), 400)
+    if confirm_password == "":
+        return make_response(jsonify({'message': 'Invalid Input Confirm Password'}), 400)
+
+
+
+
     if not user_type.lower() in ['operation', 'client']:
         return make_response(jsonify({"message": "User type must be client or operation user", "status_code": 400}),
                              400)
@@ -97,6 +111,12 @@ def account_verification_api(request):
         otp = request.form['otp']
     except Exception as e:
         return make_response(jsonify({"message": "Invalid Input", "status_code": 400}), 400)
+
+    if email == "":
+        return make_response(jsonify({'message': 'Invalid Input Email'}), 400)
+
+    if otp == "":
+        return make_response(jsonify({'message': 'Invalid Input Otp'}), 400)
 
     try:
         query = {"email": email}
@@ -151,6 +171,13 @@ def user_login_api(request):
         password = request.form['password']
     except Exception as e:
         return make_response(jsonify({'message': 'Invalid Input'}), 400)
+
+    if email == "":
+        return make_response(jsonify({'message': 'Invalid Input Email'}), 400)
+
+    if password == "":
+        return make_response(jsonify({'message': 'Invalid Input Password'}), 400)
+
     try:
         query = {"email": email}
         sort = {"password": 1, "user_type": 1, "email_verify": 1}
